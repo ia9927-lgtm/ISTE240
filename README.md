@@ -4,3 +4,4 @@ It solves the problem of scattered and hard-to-find F1 data across multiple webs
 
 Team Members:
 Om Singh - 751006630
+Adil Nurmagambetov  - 415002457
