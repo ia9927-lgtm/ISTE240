@@ -1,8 +1,5 @@
 package com.group.f1stats.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Driver {
 
     private int id;
@@ -10,19 +7,25 @@ public class Driver {
     private String lastName;
     private String nationality;
     private int driverNumber;
-    private String teamName;
+    private Team team;
 
     public Driver() {
     }
 
     public Driver(int id, String firstName, String lastName,
-                  String nationality, int driverNumber, String teamName) {
+                  String nationality, int driverNumber, Team team) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.nationality = nationality;
         this.driverNumber = driverNumber;
-        this.teamName = teamName;
+        this.team = team;
+    }
+
+    public Driver(String firstName, String lastName, Team team) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.team = team;
     }
 
     public int getId() {
@@ -65,23 +68,11 @@ public class Driver {
         this.driverNumber = driverNumber;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    @Override
-    public String toString() {
-        return "Driver{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", nationality='" + nationality + '\'' +
-                ", driverNumber=" + driverNumber +
-                ", teamName='" + teamName + '\'' +
-                '}';
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
