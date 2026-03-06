@@ -1,8 +1,5 @@
 package com.group.f1stats.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Driver {
 
     private int id;

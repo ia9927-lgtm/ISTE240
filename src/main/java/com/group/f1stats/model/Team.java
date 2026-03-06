@@ -1,8 +1,6 @@
 package com.group.f1stats.model;
 
-import org.springframework.stereotype.Component;
 
-@Component
 public class Team {
 
     private int id;
