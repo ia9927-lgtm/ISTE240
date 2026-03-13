@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teams</title>
+</head>
+<body>
+<h1>Formula 1 Teams</h1>
+<table border="1">
+    <tr>
+        <th>Team Name</th>
+        <th>Team nationality</th>
+        <th>Principals</th>
+        <th>Championships Won</th>
+    </tr>
+    {{#teams}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{nationality}}</td>
+            <td>{{principal}}</td>
+            <td>{{championshipsWon}}</td>
+        </tr>
+    {{/teams}}
+
+</table>
+<a href="/"> Home</a>
+</body>
+</html>

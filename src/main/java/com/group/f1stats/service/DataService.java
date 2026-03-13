@@ -38,4 +38,13 @@ public class DataService {
         Team team = teams.get(teamId - 1);
         drivers.add(new Driver(firstName,lastName,team));
     }
+
+    public void setDrivers(List<Driver> drivers) {
+        this.drivers = drivers;
+    }
+
+    public void addTeam(int id,String name, String nationality,String principal, int championshipsWon) {
+        Team newTeam = new Team(id,name,nationality,principal,championshipsWon);
+        teams.add(newTeam);
+    }
 }
