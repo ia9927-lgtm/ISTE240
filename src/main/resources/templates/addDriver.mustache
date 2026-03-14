@@ -1,0 +1,25 @@
+<h1>Add Driver</h1>
+
+<form action="/drivers/add" method="post">
+
+    First Name:
+    <input type="text" name="firstName">
+
+    Last Name:
+    <input type="text" name="lastName">
+
+    Team:
+
+    <select name="teamId">
+
+        {{#teams}}
+            <option value="{{id}}">{{name}}</option>
+        {{/teams}}
+
+    </select>
+
+    <button type="submit">Add Driver</button>
+
+</form>
+
+<a href="/">Home</a>

@@ -1,6 +1,5 @@
 package com.group.f1stats.model;
 
-
 public class Team {
 
     private int id;
