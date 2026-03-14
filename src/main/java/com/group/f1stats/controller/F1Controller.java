@@ -1,5 +1,6 @@
 package com.group.f1stats.controller;
 
+import com.group.f1stats.model.Team;
 import com.group.f1stats.service.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,4 +41,21 @@ public class F1Controller {
 
         return "redirect:/add/success/driver";
     }
+
+    @GetMapping("/teams")
+    public String teams(Model model){
+        model.addAttribute(service.getTeams());
+        return "teams";
+    }
+
+    @PostMapping("/teams/add")
+    public String addTeam(@RequestParam int id,
+                          @RequestParam String name,
+                          @RequestParam String nationality,
+                          @RequestParam String principal,
+                          @RequestParam int championshipsWon){
+        service.addTeam(id,name,nationality,principal,championshipsWon);
+        return "redirect:/add/success/team";
+    }
+
 }
