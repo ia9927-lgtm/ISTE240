@@ -15,7 +15,7 @@ public class F1Controller {
 
     @GetMapping("/")
     public String home(){
-        return "index";
+        return "forward:/index.html";
     }
 
     @GetMapping("/drivers")
@@ -44,18 +44,29 @@ public class F1Controller {
 
     @GetMapping("/teams")
     public String teams(Model model){
-        model.addAttribute(service.getTeams());
+        model.addAttribute("teams",service.getTeams());
         return "teams";
     }
 
+    @GetMapping("/teams/add")
+    public String addTeamPage(){
+        return "addTeam";
+    }
+
     @PostMapping("/teams/add")
-    public String addTeam(@RequestParam int id,
-                          @RequestParam String name,
+    public String addTeam(@RequestParam String name,
                           @RequestParam String nationality,
                           @RequestParam String principal,
                           @RequestParam int championshipsWon){
+        int id = service.getTeams().size() + 1;
         service.addTeam(id,name,nationality,principal,championshipsWon);
         return "redirect:/add/success/team";
     }
+    @GetMapping("/add/success/{entityName}")
+    public String successPage(@PathVariable String entityName, Model model){
+        model.addAttribute("entity", entityName);
+        return "success";
+    }
+
 
 }

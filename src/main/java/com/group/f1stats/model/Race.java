@@ -1,8 +1,5 @@
 package com.group.f1stats.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Race {
 
     private int id;

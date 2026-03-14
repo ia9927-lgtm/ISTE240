@@ -1,5 +1,6 @@
 package com.group.f1stats.model;
-
+import java.util.ArrayList;
+import java.util.List;
 public class Team {
 
     private int id;
@@ -7,6 +8,7 @@ public class Team {
     private String nationality;
     private String principal;
     private int championshipsWon;
+    private List<Driver> drivers = new ArrayList<>();
 
     public Team() {
     }
@@ -58,6 +60,13 @@ public class Team {
 
     public void setChampionshipsWon(int championshipsWon) {
         this.championshipsWon = championshipsWon;
+    }
+    public List<Driver> getDrivers() {
+        return drivers;
+    }
+
+    public void addDriver(Driver driver) {
+        drivers.add(driver);
     }
 
     @Override
