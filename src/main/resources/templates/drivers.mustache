@@ -1,0 +1,19 @@
+<h1>Drivers</h1>
+
+<table border="1">
+
+    <tr>
+        <th>Driver</th>
+        <th>Team</th>
+    </tr>
+
+    {{#drivers}}
+        <tr>
+            <td>{{firstName}} {{lastName}}</td>
+            <td>{{team.name}}</td>
+        </tr>
+    {{/drivers}}
+
+</table>
+
+<a href="/">Home</a>

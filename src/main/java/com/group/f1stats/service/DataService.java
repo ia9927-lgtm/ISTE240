@@ -13,44 +13,29 @@ public class DataService {
     private List<Driver> drivers = new ArrayList<>();
     private List<Team> teams = new ArrayList<>();
 
+    public DataService(){
 
-    public DataService() {
-
-        // Create Teams
-        Team t1 = new Team(1, "Red Bull", "Austrian", "Christian Horner", 6);
-        Team t2 = new Team(2, "Ferrari", "Italian", "Fred Vasseur", 16);
-        Team t3 = new Team(3, "Mercedes", "German", "Toto Wolff", 8);
+        Team t1 = new Team(1,"Red Bull","Austria","Christian Horner",6);
+        Team t2 = new Team(2,"Ferrari","Italy","Fred Vasseur",16);
 
         teams.add(t1);
         teams.add(t2);
-        teams.add(t3);
 
-
-        // Create Drivers
-        drivers.add(new Driver(1, "Max", "Verstappen", "Dutch", 1, "Red Bull"));
-        drivers.add(new Driver(2, "Charles", "Leclerc", "Monegasque", 16, "Ferrari"));
-        drivers.add(new Driver(3, "Lewis", "Hamilton", "British", 44, "Mercedes"));
+        drivers.add(new Driver("Max","Verstappen", t1));
+        drivers.add(new Driver("Charles","Leclerc", t2));
     }
 
-
-    // Driver Methods
-
-    public List<Driver> getDrivers() {
+    public List<Driver> getDrivers(){
         return drivers;
     }
 
-    public void addDriver(Driver driver) {
-        drivers.add(driver);
-    }
-
-
-    // Team Methods
-
-    public List<Team> getTeams() {
+    public List<Team> getTeams(){
         return teams;
     }
 
-    public void addTeam(Team team) {
-        teams.add(team);
+    public void addDriver(String firstName,String lastName,int teamId){
+
+        Team team = teams.get(teamId - 1);
+        drivers.add(new Driver(firstName,lastName,team));
     }
 }
