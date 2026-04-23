@@ -3,34 +3,32 @@
 <head>
     <link rel="stylesheet" href="/css/style.css">
     <meta charset="UTF-8">
-    <title>addDrivers</title>
+    <title>Add Driver</title>
 </head>
 <body>
+
 <h1>Add Driver</h1>
 
 <form action="/drivers/add" method="post">
 
-    First Name:
-    <input type="text" name="firstName">
-
-    Last Name:
-    <input type="text" name="lastName">
+    First Name: <input type="text" name="firstName" required><br>
+    Last Name: <input type="text" name="lastName" required><br>
+    Nationality: <input type="text" name="nationality" required><br>
+    Driver Number: <input type="number" name="driverNumber" required><br>
 
     Team:
-
     <select name="teamId">
-
         {{#teams}}
             <option value="{{id}}">{{name}}</option>
         {{/teams}}
-
-    </select>
+    </select><br>
 
     <button type="submit">Add Driver</button>
 
 </form>
 
-<a href="/">Home</a>
+<br>
+<a href="/">Back to Home</a>
 
 </body>
 </html>

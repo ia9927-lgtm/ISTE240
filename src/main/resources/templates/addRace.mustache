@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <title>Add Race</title>
+</head>
+<body>
+
+<h1>Add Race</h1>
+
+<form action="/races/add" method="post">
+    Grand Prix Name: <input type="text" name="grandPrixName" required><br>
+    Circuit: <input type="text" name="circuit" required><br>
+    Country: <input type="text" name="country" required><br>
+    Race Date: <input type="date" name="raceDate" required><br>
+    Season: <input type="number" name="season" value="2025" required><br>
+    <button type="submit">Add Race</button>
+</form>
+
+<br>
+<a href="/">Back to Home</a>
+
+</body>
+</html>

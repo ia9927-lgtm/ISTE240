@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <title>Add Result</title>
+</head>
+<body>
+
+<h1>Add Race Result</h1>
+
+<form action="/results/add" method="post">
+
+    Race:
+    <select name="raceId">
+        {{#races}}
+        <option value="{{id}}">{{grandPrixName}} ({{season}})</option>
+        {{/races}}
+    </select><br>
+
+    Driver:
+    <select name="driverId">
+        {{#drivers}}
+        <option value="{{id}}">{{firstName}} {{lastName}}</option>
+        {{/drivers}}
+    </select><br>
+
+    Finishing Position: <input type="number" name="finishingPosition" min="1" max="20" required><br>
+    Points Earned: <input type="number" name="pointsEarned" min="0" max="26" required><br>
+    Fastest Lap Time: <input type="text" name="fastestLapTime" placeholder="e.g. 1:32.456" required><br>
+
+    <button type="submit">Add Result</button>
+
+</form>
+
+<br>
+<a href="/">Back to Home</a>
+
+</body>
+</html>
