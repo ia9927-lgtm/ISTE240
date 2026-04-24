@@ -1,20 +1,29 @@
 package com.group.f1stats.model;
 
-public class Race {
+import jakarta.persistence.*;
 
-    private int id;
+@Entity
+@Table(name = "races")
+public class Race {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name="grandPrixName", length = 100, nullable = false)
     private String grandPrixName;
+    @Column(name="Circuit", length = 100, nullable = false)
     private String circuit;
+    @Column(name="Country", length = 100, nullable = false)
     private String country;
+    @Column(name="RaceDate", length = 100, nullable = false)
     private String raceDate;
+    @Column(name="Season", nullable = false)
     private int season;
 
     public Race() {
     }
 
-    public Race(int id, String grandPrixName, String circuit,
+    public Race( String grandPrixName, String circuit,
                 String country, String raceDate, int season) {
-        this.id = id;
         this.grandPrixName = grandPrixName;
         this.circuit = circuit;
         this.country = country;
@@ -22,11 +31,11 @@ public class Race {
         this.season = season;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

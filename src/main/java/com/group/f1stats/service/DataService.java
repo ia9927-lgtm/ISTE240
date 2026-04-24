@@ -4,20 +4,25 @@ import com.group.f1stats.model.Driver;
 import com.group.f1stats.model.Race;
 import com.group.f1stats.model.Result;
 import com.group.f1stats.model.Team;
+import com.group.f1stats.repository.RaceDAO;
+import jakarta.transaction.Transactional;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional
 public class DataService {
-
     private List<Driver> drivers = new ArrayList<>();
     private List<Team> teams = new ArrayList<>();
     private List<Race> races = new ArrayList<>();
     private List<Result> results = new ArrayList<>();
 
     public DataService() {
+
 
         // Seed Teams
         Team t1 = new Team(1, "Red Bull", "Austria", "Christian Horner", 6);
@@ -75,14 +80,10 @@ public class DataService {
         teams.add(new Team(id, name, nationality, principal, championshipsWon));
     }
 
-    // --- Races ---
-    public List<Race> getRaces() { return races; }
 
-    public void addRace(String grandPrixName, String circuit, String country,
-                        String raceDate, int season) {
-        int id = races.size() + 1;
-        races.add(new Race(id, grandPrixName, circuit, country, raceDate, season));
-    }
+
+
+
 
     // --- Results ---
     public List<Result> getResults() { return results; }

@@ -1,6 +1,8 @@
 package com.group.f1stats.controller;
 
+import com.group.f1stats.model.Race;
 import com.group.f1stats.service.DataService;
+import com.group.f1stats.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,16 @@ public class F1Controller {
 
     @Autowired
     private DataService service;
+
+
+    private final RaceService raceService;
+
+    public F1Controller(RaceService raceService) {
+        this.raceService = raceService;
+    }
+
+
+
 
     // Landing page
     @GetMapping("/")
@@ -69,8 +81,8 @@ public class F1Controller {
     //RACES
 
     @GetMapping("/races")
-    public String races(Model model) {
-        model.addAttribute("races", service.getRaces());
+    public String showRaces(Model model) {
+        model.addAttribute("races", raceService.findAll());
         return "races";
     }
 
@@ -80,12 +92,8 @@ public class F1Controller {
     }
 
     @PostMapping("/races/add")
-    public String addRace(@RequestParam String grandPrixName,
-                          @RequestParam String circuit,
-                          @RequestParam String country,
-                          @RequestParam String raceDate,
-                          @RequestParam int season) {
-        service.addRace(grandPrixName, circuit, country, raceDate, season);
+    public String addRace(@ModelAttribute Race race) {
+        raceService.createRace(race);
         return "redirect:/add/success/race";
     }
 
