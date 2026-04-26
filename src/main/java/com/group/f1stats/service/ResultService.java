@@ -64,7 +64,7 @@ public class ResultService {
             result.setRace(race);
         }
         if (result.getDriver() != null) {
-            Driver driver = driverRepository.findById((int) result.getDriver().getId())
+            Driver driver = driverRepository.findById(result.getDriver().getId())
                     .orElseThrow(() -> new RuntimeException("Driver not found"));
             result.setDriver(driver);
         }
@@ -80,7 +80,7 @@ public class ResultService {
             oldRes.setRace(race);
         }
         if (resultToUpdate.getDriver() != null) {
-            Driver driver = driverRepository.findById((int) resultToUpdate.getDriver().getId())
+            Driver driver = driverRepository.findById(resultToUpdate.getDriver().getId())
                     .orElseThrow(() -> new RuntimeException("Driver not found"));
             oldRes.setDriver(driver);
         }
