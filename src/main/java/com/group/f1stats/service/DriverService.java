@@ -27,6 +27,10 @@ public class DriverService {
         return driverRepository.findByNationality(nationality);
     }
 
+    public List<Driver> getDriversWithHighNumber(int number) {
+        return driverRepository.findDriversWithNumberGreaterThan(number);
+    }
+
     public Driver createDriver(Driver driver) {
         return driverRepository.save(driver);
     }
