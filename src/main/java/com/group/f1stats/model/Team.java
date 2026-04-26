@@ -1,82 +1,50 @@
+// Author: Izhan Akhtar - 421009836
+// Entity: Team
 package com.group.f1stats.model;
-import java.util.ArrayList;
-import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "teams")
 public class Team {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Column(name = "nationality", nullable = false, length = 50)
     private String nationality;
+
+    @Column(name = "principal", nullable = false, length = 100)
     private String principal;
-    private int championshipsWon;
-    private List<Driver> drivers = new ArrayList<>();
 
-    public Team() {
-    }
+    @Column(name = "championships")
+    private int championships;
 
-    public Team(int id, String name, String nationality,
-                String principal, int championshipsWon) {
-        this.id = id;
+    public Team() {}
+
+    public Team(String name, String nationality, String principal, int championships) {
         this.name = name;
         this.nationality = nationality;
         this.principal = principal;
-        this.championshipsWon = championshipsWon;
+        this.championships = championships;
     }
 
-    public int getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getNationality() { return nationality; }
+    public void setNationality(String nationality) { this.nationality = nationality; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getPrincipal() { return principal; }
+    public void setPrincipal(String principal) { this.principal = principal; }
 
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
-
-    public String getPrincipal() {
-        return principal;
-    }
-
-    public void setPrincipal(String principal) {
-        this.principal = principal;
-    }
-
-    public int getChampionshipsWon() {
-        return championshipsWon;
-    }
-
-    public void setChampionshipsWon(int championshipsWon) {
-        this.championshipsWon = championshipsWon;
-    }
-    public List<Driver> getDrivers() {
-        return drivers;
-    }
-
-    public void addDriver(Driver driver) {
-        drivers.add(driver);
-    }
-
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", nationality='" + nationality + '\'' +
-                ", principal='" + principal + '\'' +
-                ", championshipsWon=" + championshipsWon +
-                '}';
-    }
+    public int getChampionships() { return championships; }
+    public void setChampionships(int championships) { this.championships = championships; }
 }
