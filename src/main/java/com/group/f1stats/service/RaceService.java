@@ -1,10 +1,10 @@
+// Adil Nurmagambetov UID:415002457
 package com.group.f1stats.service;
 
 
 import com.group.f1stats.model.Race;
 import com.group.f1stats.repository.RaceDAO;
 import jakarta.transaction.Transactional;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
