@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>F1 Races</title>
+    <title>F1 Results</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
@@ -22,21 +22,21 @@
 <nav class="navbar navbar-dark" style="background:#111; border-bottom:2px solid #e10600;">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" style="color:#e10600;" href="index.html">🏎 F1Stats</a>
-        <span class="text-muted">Races</span>
+        <span class="text-muted">Results</span>
     </div>
 </nav>
 
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>F1 Races</h2>
-        <button class="btn btn-f1" data-bs-toggle="modal" data-bs-target="#raceModal" onclick="openAddModal()">
-            + Add Race
+        <h2>F1 Results</h2>
+        <button class="btn btn-f1" data-bs-toggle="modal" data-bs-target="#resultModal" onclick="openAddModal()">
+            + Add Result
         </button>
     </div>
 
     <div class="mb-3" style="max-width:360px;">
         <input type="text" id="searchInput" class="form-control"
-               placeholder="Search by Grand Prix name..." oninput="searchRaces()" />
+               placeholder="Search by driver, team, or race..." oninput="searchResults()" />
     </div>
 
     <div id="loadingSpinner" class="text-center my-3" style="display:none;">
@@ -50,52 +50,52 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Grand Prix</th>
-                <th>Circuit</th>
-                <th>Country</th>
-                <th>Date</th>
-                <th>Season</th>
+                <th>Race</th>
+                <th>Driver</th>
+                <th>Team</th>
+                <th>Position</th>
+                <th>Points</th>
                 <th>Actions</th>
             </tr>
             </thead>
-            <tbody id="racesTableBody"></tbody>
+            <tbody id="resultsTableBody"></tbody>
         </table>
     </div>
 </div>
 
-<div class="modal fade" id="raceModal" tabindex="-1">
+<div class="modal fade" id="resultModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-light border-secondary">
             <div class="modal-header border-secondary">
-                <h5 class="modal-title" id="modalTitle">Add Race</h5>
+                <h5 class="modal-title" id="modalTitle">Add Result</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="raceId" />
+                <input type="hidden" id="resultId" />
                 <div class="mb-3">
-                    <label class="form-label">Grand Prix Name</label>
-                    <input type="text" id="grandPrixName" class="form-control" placeholder="e.g. Bahrain Grand Prix" />
+                    <label class="form-label">Race ID</label>
+                    <input type="number" id="raceId" class="form-control" placeholder="e.g. 1" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Circuit</label>
-                    <input type="text" id="circuit" class="form-control" placeholder="e.g. Bahrain International Circuit" />
+                    <label class="form-label">Driver ID</label>
+                    <input type="number" id="driverId" class="form-control" placeholder="e.g. 1" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Country</label>
-                    <input type="text" id="country" class="form-control" placeholder="e.g. Bahrain" />
+                    <label class="form-label">Team ID</label>
+                    <input type="number" id="teamId" class="form-control" placeholder="e.g. 1" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Race Date</label>
-                    <input type="date" id="raceDate" class="form-control" />
+                    <label class="form-label">Position</label>
+                    <input type="number" id="position" class="form-control" min="1" placeholder="e.g. 1" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Season</label>
-                    <input type="number" id="season" class="form-control" min="1950" placeholder="e.g. 2025" />
+                    <label class="form-label">Points</label>
+                    <input type="number" id="points" class="form-control" min="0" step="0.5" placeholder="e.g. 25" />
                 </div>
             </div>
             <div class="modal-footer border-secondary">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-f1" onclick="saveRace()">Save</button>
+                <button class="btn btn-f1" onclick="saveResult()">Save</button>
             </div>
         </div>
     </div>
@@ -112,11 +112,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const API = '/api/races';
-    let allRaces = [];
+    const API = '/api/results';
+    let allResults = [];
 
     $(document).ready(function() {
-        getAllRaces();
+        getAllResults();
     });
 
     function showToast(msg, isSuccess) {
@@ -132,7 +132,19 @@
         document.getElementById('loadingSpinner').style.display = show ? 'block' : 'none';
     }
 
-    function getAllRaces() {
+    function getRaceName(result) {
+        return result.race?.grandPrixName || result.raceName || result.grandPrixName || result.raceId || '';
+    }
+
+    function getDriverName(result) {
+        return result.driver?.name || result.driverName || result.driverId || '';
+    }
+
+    function getTeamName(result) {
+        return result.team?.name || result.teamName || result.teamId || '';
+    }
+
+    function getAllResults() {
         showLoading(true);
         $.ajax({
             url: API,
@@ -140,60 +152,62 @@
             dataType: 'json',
             success: function(response) {
                 showLoading(false);
-                allRaces = response;
+                allResults = response;
                 buildTable(response);
             },
             error: function() {
                 showLoading(false);
-                showToast('Failed to load races', false);
+                showToast('Failed to load results', false);
             }
         });
     }
 
-    function buildTable(races) {
+    function buildTable(results) {
         let tbl_body = '';
-        if (!races || races.length === 0) {
-            tbl_body = '<tr><td colspan="7" class="text-center text-muted">No races found</td></tr>';
+        if (!results || results.length === 0) {
+            tbl_body = '<tr><td colspan="7" class="text-center text-muted">No results found</td></tr>';
         } else {
-            $.each(races, function(index, r) {
+            $.each(results, function(index, r) {
                 tbl_body +=
                     '<tr>' +
                     '<td>' + (r.id ?? '') + '</td>' +
-                    '<td>' + (r.grandPrixName ?? '') + '</td>' +
-                    '<td>' + (r.circuit ?? '') + '</td>' +
-                    '<td>' + (r.country ?? '') + '</td>' +
-                    '<td>' + (r.raceDate ?? '') + '</td>' +
-                    '<td>' + (r.season ?? '') + '</td>' +
+                    '<td>' + getRaceName(r) + '</td>' +
+                    '<td>' + getDriverName(r) + '</td>' +
+                    '<td>' + getTeamName(r) + '</td>' +
+                    '<td>' + (r.position ?? '') + '</td>' +
+                    '<td>' + (r.points ?? '') + '</td>' +
                     '<td>' +
                     '<button class="btn btn-sm btn-outline-light me-1" onclick="openEditModal(' + r.id + ')">Edit</button>' +
-                    '<button class="btn btn-sm btn-outline-danger" onclick="deleteRace(' + r.id + ')">Delete</button>' +
+                    '<button class="btn btn-sm btn-outline-danger" onclick="deleteResult(' + r.id + ')">Delete</button>' +
                     '</td>' +
                     '</tr>';
             });
         }
-        $('#racesTableBody').html(tbl_body);
+        $('#resultsTableBody').html(tbl_body);
     }
 
-    function searchRaces() {
+    function searchResults() {
         const query = $('#searchInput').val().toLowerCase().trim();
         if (query === '') {
-            buildTable(allRaces);
+            buildTable(allResults);
             return;
         }
-        const filtered = allRaces.filter(r =>
-            (r.grandPrixName || '').toLowerCase().includes(query)
+        const filtered = allResults.filter(r =>
+            String(getRaceName(r)).toLowerCase().includes(query) ||
+            String(getDriverName(r)).toLowerCase().includes(query) ||
+            String(getTeamName(r)).toLowerCase().includes(query)
         );
         buildTable(filtered);
     }
 
     function openAddModal() {
-        $('#modalTitle').text('Add Race');
+        $('#modalTitle').text('Add Result');
+        $('#resultId').val('');
         $('#raceId').val('');
-        $('#grandPrixName').val('');
-        $('#circuit').val('');
-        $('#country').val('');
-        $('#raceDate').val('');
-        $('#season').val('');
+        $('#driverId').val('');
+        $('#teamId').val('');
+        $('#position').val('');
+        $('#points').val('');
     }
 
     function openEditModal(id) {
@@ -202,30 +216,30 @@
             type: 'GET',
             dataType: 'json',
             success: function(r) {
-                $('#modalTitle').text('Edit Race');
-                $('#raceId').val(r.id);
-                $('#grandPrixName').val(r.grandPrixName);
-                $('#circuit').val(r.circuit);
-                $('#country').val(r.country);
-                $('#raceDate').val(r.raceDate);
-                $('#season').val(r.season);
-                const modal = new bootstrap.Modal(document.getElementById('raceModal'));
+                $('#modalTitle').text('Edit Result');
+                $('#resultId').val(r.id);
+                $('#raceId').val(r.raceId || r.race?.id || '');
+                $('#driverId').val(r.driverId || r.driver?.id || '');
+                $('#teamId').val(r.teamId || r.team?.id || '');
+                $('#position').val(r.position);
+                $('#points').val(r.points);
+                const modal = new bootstrap.Modal(document.getElementById('resultModal'));
                 modal.show();
             },
             error: function() {
-                showToast('Failed to load race', false);
+                showToast('Failed to load result', false);
             }
         });
     }
 
-    function saveRace() {
-        const id = $('#raceId').val();
+    function saveResult() {
+        const id = $('#resultId').val();
         const body = {
-            grandPrixName: $('#grandPrixName').val(),
-            circuit: $('#circuit').val(),
-            country: $('#country').val(),
-            raceDate: $('#raceDate').val(),
-            season: parseInt($('#season').val()) || 0
+            raceId: parseInt($('#raceId').val()) || null,
+            driverId: parseInt($('#driverId').val()) || null,
+            teamId: parseInt($('#teamId').val()) || null,
+            position: parseInt($('#position').val()) || 0,
+            points: parseFloat($('#points').val()) || 0
         };
 
         $.ajax({
@@ -234,9 +248,9 @@
             contentType: 'application/json',
             data: JSON.stringify(body),
             success: function() {
-                bootstrap.Modal.getInstance(document.getElementById('raceModal')).hide();
-                getAllRaces();
-                showToast(id ? 'Race updated successfully!' : 'Race added successfully!', true);
+                bootstrap.Modal.getInstance(document.getElementById('resultModal')).hide();
+                getAllResults();
+                showToast(id ? 'Result updated successfully!' : 'Result added successfully!', true);
             },
             error: function() {
                 showToast('Save failed', false);
@@ -244,14 +258,14 @@
         });
     }
 
-    function deleteRace(id) {
-        if (!confirm('Are you sure you want to delete this race?')) return;
+    function deleteResult(id) {
+        if (!confirm('Are you sure you want to delete this result?')) return;
         $.ajax({
             url: API + '/' + id,
             type: 'DELETE',
             success: function() {
-                getAllRaces();
-                showToast('Race deleted successfully!', true);
+                getAllResults();
+                showToast('Result deleted successfully!', true);
             },
             error: function() {
                 showToast('Delete failed', false);
