@@ -107,7 +107,7 @@ public class F1Controller {
 
     @GetMapping("/results/add")
     public String addResultPage(Model model) {
-        model.addAttribute("races", service.getRaces());
+        model.addAttribute("races", raceService.findAll());
         model.addAttribute("drivers", service.getDrivers());
         return "addResult";
     }
