@@ -2,6 +2,10 @@
 
 package com.group.f1stats.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "drivers")
 public class Driver {
 
     private int id;
