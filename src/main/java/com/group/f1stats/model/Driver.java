@@ -13,6 +13,9 @@ public class Driver {
     private String lastName;
     private String nationality;
     private int driverNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
     private Team team;
 
     public Driver() {
