@@ -34,9 +34,9 @@
         </button>
     </div>
 
-    <div class="mb-3" style="max-width:360px;">
+    <div class="mb-3" style="max-width:320px;">
         <input type="text" id="searchInput" class="form-control"
-               placeholder="Search by driver, team, or race..." oninput="searchResults()" />
+               placeholder="Search by driver ID..." oninput="searchResults()" />
     </div>
 
     <div id="loadingSpinner" class="text-center my-3" style="display:none;">
@@ -55,6 +55,7 @@
                 <th>Team</th>
                 <th>Position</th>
                 <th>Points</th>
+                <th>Fastest Lap</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -63,6 +64,7 @@
     </div>
 </div>
 
+<!-- Add / Edit Modal -->
 <div class="modal fade" id="resultModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-light border-secondary">
@@ -81,16 +83,16 @@
                     <input type="number" id="driverId" class="form-control" placeholder="e.g. 1" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Team ID</label>
-                    <input type="number" id="teamId" class="form-control" placeholder="e.g. 1" />
+                    <label class="form-label">Finishing Position</label>
+                    <input type="number" id="finishingPosition" class="form-control" min="1" placeholder="e.g. 1" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Position</label>
-                    <input type="number" id="position" class="form-control" min="1" placeholder="e.g. 1" />
+                    <label class="form-label">Points Earned</label>
+                    <input type="number" id="pointsEarned" class="form-control" min="0" placeholder="e.g. 25" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Points</label>
-                    <input type="number" id="points" class="form-control" min="0" step="0.5" placeholder="e.g. 25" />
+                    <label class="form-label">Fastest Lap Time</label>
+                    <input type="text" id="fastestLapTime" class="form-control" placeholder="e.g. 1:34.567" />
                 </div>
             </div>
             <div class="modal-footer border-secondary">
@@ -101,6 +103,7 @@
     </div>
 </div>
 
+<!-- Toast -->
 <div class="toast-container">
     <div id="toast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive">
         <div class="d-flex">
@@ -113,7 +116,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const API = '/api/results';
-    let allResults = [];
 
     $(document).ready(function() {
         getAllResults();
@@ -132,18 +134,7 @@
         document.getElementById('loadingSpinner').style.display = show ? 'block' : 'none';
     }
 
-    function getRaceName(result) {
-        return result.race?.grandPrixName || result.raceName || result.grandPrixName || result.raceId || '';
-    }
-
-    function getDriverName(result) {
-        return result.driver?.name || result.driverName || result.driverId || '';
-    }
-
-    function getTeamName(result) {
-        return result.team?.name || result.teamName || result.teamId || '';
-    }
-
+    // ── function A: gets all results from the API ─────────────────────────────
     function getAllResults() {
         showLoading(true);
         $.ajax({
@@ -152,7 +143,6 @@
             dataType: 'json',
             success: function(response) {
                 showLoading(false);
-                allResults = response;
                 buildTable(response);
             },
             error: function() {
@@ -162,20 +152,28 @@
         });
     }
 
+    // ── function B: builds the HTML table from the data ───────────────────────
     function buildTable(results) {
-        let tbl_body = '';
-        if (!results || results.length === 0) {
-            tbl_body = '<tr><td colspan="7" class="text-center text-muted">No results found</td></tr>';
+        var tbl_body = '';
+        if (results.length === 0) {
+            tbl_body = '<tr><td colspan="8" class="text-center text-muted">No results found</td></tr>';
         } else {
             $.each(results, function(index, r) {
+                var raceName = '';
+                var driverName = '';
+                var teamName = '';
+                if (r.race) { raceName = r.race.grandPrixName; }
+                if (r.driver) { driverName = r.driver.firstName + ' ' + r.driver.lastName; }
+                if (r.driver && r.driver.team) { teamName = r.driver.team.name; }
                 tbl_body +=
                     '<tr>' +
-                    '<td>' + (r.id ?? '') + '</td>' +
-                    '<td>' + getRaceName(r) + '</td>' +
-                    '<td>' + getDriverName(r) + '</td>' +
-                    '<td>' + getTeamName(r) + '</td>' +
-                    '<td>' + (r.position ?? '') + '</td>' +
-                    '<td>' + (r.points ?? '') + '</td>' +
+                    '<td>' + r.id + '</td>' +
+                    '<td>' + raceName + '</td>' +
+                    '<td>' + driverName + '</td>' +
+                    '<td>' + teamName + '</td>' +
+                    '<td>' + r.finishingPosition + '</td>' +
+                    '<td>' + r.pointsEarned + '</td>' +
+                    '<td>' + r.fastestLapTime + '</td>' +
                     '<td>' +
                     '<button class="btn btn-sm btn-outline-light me-1" onclick="openEditModal(' + r.id + ')">Edit</button>' +
                     '<button class="btn btn-sm btn-outline-danger" onclick="deleteResult(' + r.id + ')">Delete</button>' +
@@ -187,17 +185,25 @@
     }
 
     function searchResults() {
-        const query = $('#searchInput').val().toLowerCase().trim();
+        const query = $('#searchInput').val();
         if (query === '') {
-            buildTable(allResults);
+            getAllResults();
             return;
         }
-        const filtered = allResults.filter(r =>
-            String(getRaceName(r)).toLowerCase().includes(query) ||
-            String(getDriverName(r)).toLowerCase().includes(query) ||
-            String(getTeamName(r)).toLowerCase().includes(query)
-        );
-        buildTable(filtered);
+        showLoading(true);
+        $.ajax({
+            url: API + '/search?driverId=' + query,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                showLoading(false);
+                buildTable(response);
+            },
+            error: function() {
+                showLoading(false);
+                showToast('Search failed', false);
+            }
+        });
     }
 
     function openAddModal() {
@@ -205,9 +211,9 @@
         $('#resultId').val('');
         $('#raceId').val('');
         $('#driverId').val('');
-        $('#teamId').val('');
-        $('#position').val('');
-        $('#points').val('');
+        $('#finishingPosition').val('');
+        $('#pointsEarned').val('');
+        $('#fastestLapTime').val('');
     }
 
     function openEditModal(id) {
@@ -218,11 +224,11 @@
             success: function(r) {
                 $('#modalTitle').text('Edit Result');
                 $('#resultId').val(r.id);
-                $('#raceId').val(r.raceId || r.race?.id || '');
-                $('#driverId').val(r.driverId || r.driver?.id || '');
-                $('#teamId').val(r.teamId || r.team?.id || '');
-                $('#position').val(r.position);
-                $('#points').val(r.points);
+                $('#raceId').val(r.race ? r.race.id : '');
+                $('#driverId').val(r.driver ? r.driver.id : '');
+                $('#finishingPosition').val(r.finishingPosition);
+                $('#pointsEarned').val(r.pointsEarned);
+                $('#fastestLapTime').val(r.fastestLapTime);
                 const modal = new bootstrap.Modal(document.getElementById('resultModal'));
                 modal.show();
             },
@@ -235,11 +241,11 @@
     function saveResult() {
         const id = $('#resultId').val();
         const body = {
-            raceId: parseInt($('#raceId').val()) || null,
-            driverId: parseInt($('#driverId').val()) || null,
-            teamId: parseInt($('#teamId').val()) || null,
-            position: parseInt($('#position').val()) || 0,
-            points: parseFloat($('#points').val()) || 0
+            race: { id: parseInt($('#raceId').val()) },
+            driver: { id: parseInt($('#driverId').val()) },
+            finishingPosition: parseInt($('#finishingPosition').val()) || 0,
+            pointsEarned: parseInt($('#pointsEarned').val()) || 0,
+            fastestLapTime: $('#fastestLapTime').val()
         };
 
         $.ajax({
