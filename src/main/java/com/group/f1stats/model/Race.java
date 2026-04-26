@@ -1,3 +1,4 @@
+// Adil Nurmagambetov UID:415002457
 package com.group.f1stats.model;
 
 import jakarta.persistence.*;

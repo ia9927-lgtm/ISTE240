@@ -1,3 +1,4 @@
+// Adil Nurmagambetov UID:415002457
 package com.group.f1stats.repository;
 
 import com.group.f1stats.model.Race;
@@ -25,7 +26,7 @@ public interface RaceDAO extends JpaRepository<Race, Long> {
     @Query("UPDATE Race r SET r = :race WHERE r.id = :id ")
     void updateById(@Param("id") Long id,@Param("race") Race raceToUpdate);
 
-    //craete method
+
 
 
 

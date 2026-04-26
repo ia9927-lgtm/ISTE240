@@ -1,10 +1,9 @@
+// Adil Nurmagambetov UID:415002457
 package com.group.f1stats.controller;
-
 
 import com.group.f1stats.model.Race;
 import com.group.f1stats.service.RaceService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
