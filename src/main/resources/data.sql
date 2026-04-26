@@ -12,12 +12,12 @@ INSERT INTO drivers (first_name, last_name, nationality, driver_number, team_id)
                                                                                      ('Lando', 'Norris', 'British', 4, 4),
                                                                                      ('Fernando', 'Alonso', 'Spanish', 14, 5);
 
-INSERT INTO races (grandPrixName, Circuit, Country, RaceDate, Season) VALUES
-                                                                          ('Bahrain Grand Prix', 'Bahrain International Circuit', 'Bahrain', '2025-03-02', 2025),
-                                                                          ('Saudi Arabian Grand Prix', 'Jeddah Corniche Circuit', 'Saudi Arabia', '2025-03-09', 2025),
-                                                                          ('Australian Grand Prix', 'Albert Park Circuit', 'Australia', '2025-03-23', 2025);
+INSERT INTO races (grand_prix_name, circuit, country, race_date, season) VALUES
+                                                                             ('Bahrain Grand Prix', 'Bahrain International Circuit', 'Bahrain', '2025-03-02', 2025),
+                                                                             ('Saudi Arabian Grand Prix', 'Jeddah Corniche Circuit', 'Saudi Arabia', '2025-03-09', 2025),
+                                                                             ('Australian Grand Prix', 'Albert Park Circuit', 'Australia', '2025-03-23', 2025);
 
-INSERT INTO results (raceID, driverID, finishingPosition, pointsEarned, fastestLapTime) VALUES
-                                                                                            (1, 1, 1, 25, '1:34.567'),
-                                                                                            (1, 2, 2, 18, '1:34.891'),
-                                                                                            (2, 3, 1, 25, '1:31.234');
+INSERT INTO results (raceid, driverid, finishing_position, points_earned, fastest_lap_time) VALUES
+                                                                                                (1, 1, 1, 25, '1:34.567'),
+                                                                                                (1, 2, 2, 18, '1:34.891'),
+                                                                                                (2, 3, 1, 25, '1:31.234');
