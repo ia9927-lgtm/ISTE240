@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>F1 Drivers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white p-4">
+
+<div class="container">
+    <h1 class="mb-4">🏎️ F1 Drivers</h1>
+
+    <!-- Search Bar -->
+    <div class="input-group mb-3">
+        <input id="searchInput" class="form-control" placeholder="Search by nationality...">
+        <button class="btn btn-outline-light" onclick="searchDrivers()">Search</button>
+        <button class="btn btn-outline-secondary" onclick="loadDrivers()">Clear</button>
+    </div>
+
+    <!-- Add / Edit Form -->
+    <div class="card bg-secondary mb-4 p-3">
+        <h5>Add / Edit Driver</h5>
+        <input id="driverId" type="hidden">
+        <div class="row g-2">
+            <div class="col"><input id="firstName" class="form-control" placeholder="First Name"></div>
+            <div class="col"><input id="lastName" class="form-control" placeholder="Last Name"></div>
+            <div class="col"><input id="nationality" class="form-control" placeholder="Nationality"></div>
+            <div class="col"><input id="driverNumber" class="form-control" placeholder="Number" type="number"></div>
+        </div>
+        <button class="btn btn-success mt-2" onclick="saveDriver()">Save Driver</button>
+    </div>
+
+    <!-- Drivers Table -->
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Nationality</th>
+            <th>Number</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="driverTable"></tbody>
+    </table>
+</div>
+
+<!-- Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast text-white bg-success">
+        <div class="toast-body" id="toastMsg">Done!</div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API = '/api/drivers';
+
+    async function loadDrivers() {
+        const res = await fetch(API);
+        const drivers = await res.json();
+        renderTable(drivers);
+    }
+
+    async function searchDrivers() {
+        const nationality = document.getElementById('searchInput').value;
+        const res = await fetch(`${API}/search?nationality=${nationality}`);
+        const drivers = await res.json();
+        renderTable(drivers);
+    }
+
+    function renderTable(drivers) {
+        const tbody = document.getElementById('driverTable');
+        tbody.innerHTML = '';
+        drivers.forEach(d => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.firstName}</td>
+                    <td>${d.lastName}</td>
+                    <td>${d.nationality}</td>
+                    <td>${d.driverNumber}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" onclick="editDriver(${d.id},'${d.firstName}','${d.lastName}','${d.nationality}',${d.driverNumber})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteDriver(${d.id})">Delete</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    async function saveDriver() {
+        const id = document.getElementById('driverId').value;
+        const body = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            nationality: document.getElementById('nationality').value,
+            driverNumber: parseInt(document.getElementById('driverNumber').value)
+        };
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `${API}/${id}` : API;
+        await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        clearForm();
+        showToast(id ? 'Driver updated!' : 'Driver added!');
+        loadDrivers();
+    }
+
+    function editDriver(id, firstName, lastName, nationality, driverNumber) {
+        document.getElementById('driverId').value = id;
+        document.getElementById('firstName').value = firstName;
+        document.getElementById('lastName').value = lastName;
+        document.getElementById('nationality').value = nationality;
+        document.getElementById('driverNumber').value = driverNumber;
+    }
+
+    async function deleteDriver(id) {
+        await fetch(`${API}/${id}`, { method: 'DELETE' });
+        showToast('Driver deleted!');
+        loadDrivers();
+    }
+
+    function clearForm() {
+        ['driverId','firstName','lastName','nationality','driverNumber'].forEach(f => document.getElementById(f).value = '');
+    }
+
+    function showToast(msg) {
+        document.getElementById('toastMsg').textContent = msg;
+        new bootstrap.Toast(document.getElementById('toast')).show();
+    }
+
+    loadDrivers();
+</script>
+</body>
+</html>

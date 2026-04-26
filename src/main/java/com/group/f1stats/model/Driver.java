@@ -1,5 +1,11 @@
+// Author: Om Singh - 751006630
+
 package com.group.f1stats.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "drivers")
 public class Driver {
 
     private int id;
@@ -7,6 +13,9 @@ public class Driver {
     private String lastName;
     private String nationality;
     private int driverNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
     private Team team;
 
     public Driver() {
