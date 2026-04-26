@@ -12,23 +12,17 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "nationality")
     private String nationality;
-
-    @Column(name = "driver_number")
     private int driverNumber;
 
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public Driver() {}
+    public Driver() {
+    }
 
     public Driver(int id, String firstName, String lastName,
                   String nationality, int driverNumber, Team team) {
@@ -46,21 +40,51 @@ public class Driver {
         this.team = team;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public String getNationality() { return nationality; }
-    public void setNationality(String nationality) { this.nationality = nationality; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public int getDriverNumber() { return driverNumber; }
-    public void setDriverNumber(int driverNumber) { this.driverNumber = driverNumber; }
+    public String getLastName() {
+        return lastName;
+    }
 
-    public Team getTeam() { return team; }
-    public void setTeam(Team team) { this.team = team; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public int getDriverNumber() {
+        return driverNumber;
+    }
+
+    public void setDriverNumber(int driverNumber) {
+        this.driverNumber = driverNumber;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

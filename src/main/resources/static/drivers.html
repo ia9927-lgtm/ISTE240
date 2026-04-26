@@ -1,55 +1,112 @@
+<!-- Author: Om Singh - 751006630 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>F1 Drivers</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body { background: #0a0a0a; color: #e8e8e8; }
+        h2 { color: #e10600; }
+        .table { color: #e8e8e8; }
+        .btn-f1 { background: #e10600; border: none; color: #fff; }
+        .btn-f1:hover { background: #9a0400; color: #fff; }
+        .form-control { background: #1a1a1a; color: #e8e8e8; border-color: #333; }
+        .form-control:focus { background: #1a1a1a; color: #e8e8e8; border-color: #e10600; box-shadow: none; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+    </style>
 </head>
-<body class="bg-dark text-white p-4">
+<body>
+<nav class="navbar navbar-dark" style="background:#111; border-bottom:2px solid #e10600;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" style="color:#e10600;" href="index.html">🏎 F1Stats</a>
+        <span class="text-muted">Drivers</span>
+    </div>
+</nav>
 
-<div class="container">
-    <h1 class="mb-4">🏎️ F1 Drivers</h1>
-
-    <!-- Search Bar -->
-    <div class="input-group mb-3">
-        <input id="searchInput" class="form-control" placeholder="Search by nationality...">
-        <button class="btn btn-outline-light" onclick="searchDrivers()">Search</button>
-        <button class="btn btn-outline-secondary" onclick="loadDrivers()">Clear</button>
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>F1 Drivers</h2>
+        <button class="btn btn-f1" data-bs-toggle="modal" data-bs-target="#driverModal" onclick="openAddModal()">
+            + Add Driver
+        </button>
     </div>
 
-    <!-- Add / Edit Form -->
-    <div class="card bg-secondary mb-4 p-3">
-        <h5>Add / Edit Driver</h5>
-        <input id="driverId" type="hidden">
-        <div class="row g-2">
-            <div class="col"><input id="firstName" class="form-control" placeholder="First Name"></div>
-            <div class="col"><input id="lastName" class="form-control" placeholder="Last Name"></div>
-            <div class="col"><input id="nationality" class="form-control" placeholder="Nationality"></div>
-            <div class="col"><input id="driverNumber" class="form-control" placeholder="Number" type="number"></div>
+    <!-- Search bar -->
+    <div class="mb-3" style="max-width:320px;">
+        <input type="text" id="searchInput" class="form-control"
+               placeholder="Search by nationality..." oninput="searchDrivers()" />
+    </div>
+
+    <!-- Loading spinner -->
+    <div id="loadingSpinner" class="text-center my-3" style="display:none;">
+        <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
-        <button class="btn btn-success mt-2" onclick="saveDriver()">Save Driver</button>
     </div>
 
-    <!-- Drivers Table -->
-    <table class="table table-dark table-striped">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Nationality</th>
-            <th>Number</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="driverTable"></tbody>
-    </table>
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-dark table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Nationality</th>
+                <th>Driver Number</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="driversTableBody"></tbody>
+        </table>
+    </div>
 </div>
 
-<!-- Toast Notification -->
-<div class="position-fixed bottom-0 end-0 p-3">
-    <div id="toast" class="toast text-white bg-success">
-        <div class="toast-body" id="toastMsg">Done!</div>
+<!-- Add / Edit Modal -->
+<div class="modal fade" id="driverModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="modalTitle">Add Driver</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="driverId" />
+                <div class="mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" id="driverFirstName" class="form-control" placeholder="e.g. Lewis" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" id="driverLastName" class="form-control" placeholder="e.g. Hamilton" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nationality</label>
+                    <input type="text" id="driverNationality" class="form-control" placeholder="e.g. British" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Driver Number</label>
+                    <input type="number" id="driverNumber" class="form-control" min="1" placeholder="e.g. 44" />
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-f1" onclick="saveDriver()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast-container">
+    <div id="toast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
     </div>
 </div>
 
@@ -57,78 +114,162 @@
 <script>
     const API = '/api/drivers';
 
-    async function loadDrivers() {
-        const res = await fetch(API);
-        const drivers = await res.json();
-        renderTable(drivers);
+    // on page load
+    $(document).ready(function() {
+        getAllDrivers();
+    });
+
+    // toast
+    function showToast(msg, isSuccess) {
+        const toastEl = document.getElementById('toast');
+        toastEl.classList.remove('bg-success', 'bg-danger');
+        toastEl.classList.add(isSuccess ? 'bg-success' : 'bg-danger');
+        document.getElementById('toastMsg').textContent = msg;
+        const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+        toast.show();
     }
 
-    async function searchDrivers() {
-        const nationality = document.getElementById('searchInput').value;
-        const res = await fetch(`${API}/search?nationality=${nationality}`);
-        const drivers = await res.json();
-        renderTable(drivers);
+    // loading
+    function showLoading(show) {
+        document.getElementById('loadingSpinner').style.display = show ? 'block' : 'none';
     }
 
-    function renderTable(drivers) {
-        const tbody = document.getElementById('driverTable');
-        tbody.innerHTML = '';
-        drivers.forEach(d => {
-            tbody.innerHTML += `
-                <tr>
-                    <td>${d.id}</td>
-                    <td>${d.firstName}</td>
-                    <td>${d.lastName}</td>
-                    <td>${d.nationality}</td>
-                    <td>${d.driverNumber}</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning me-1" onclick="editDriver(${d.id},'${d.firstName}','${d.lastName}','${d.nationality}',${d.driverNumber})">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteDriver(${d.id})">Delete</button>
-                    </td>
-                </tr>`;
+    // function A: gets all drivers from the API
+    function getAllDrivers() {
+        showLoading(true);
+        $.ajax({
+            url: API,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                showLoading(false);
+                buildTable(response);
+            },
+            error: function() {
+                showLoading(false);
+                showToast('Failed to load drivers', false);
+            }
         });
     }
 
-    async function saveDriver() {
-        const id = document.getElementById('driverId').value;
+    // function B: builds the HTML table from the data
+    function buildTable(drivers) {
+        let tbl_body = '';
+        if (drivers.length === 0) {
+            tbl_body = '<tr><td colspan="6" class="text-center text-muted">No drivers found</td></tr>';
+        } else {
+            $.each(drivers, function(index, d) {
+                tbl_body +=
+                    '<tr>' +
+                    '<td>' + d.id + '</td>' +
+                    '<td>' + d.firstName + '</td>' +
+                    '<td>' + d.lastName + '</td>' +
+                    '<td>' + d.nationality + '</td>' +
+                    '<td>' + d.driverNumber + '</td>' +
+                    '<td>' +
+                    '<button class="btn btn-sm btn-outline-light me-1" onclick="openEditModal(' + d.id + ')">Edit</button>' +
+                    '<button class="btn btn-sm btn-outline-danger" onclick="deleteDriver(' + d.id + ')">Delete</button>' +
+                    '</td>' +
+                    '</tr>';
+            });
+        }
+        $('#driversTableBody').html(tbl_body);
+    }
+
+    // search
+    function searchDrivers() {
+        const query = $('#searchInput').val();
+        if (query === '') {
+            getAllDrivers();
+            return;
+        }
+        showLoading(true);
+        $.ajax({
+            url: API + '/search',
+            type: 'GET',
+            data: { nationality: query },
+            dataType: 'json',
+            success: function(response) {
+                showLoading(false);
+                buildTable(response);
+            },
+            error: function() {
+                showLoading(false);
+                showToast('Search failed', false);
+            }
+        });
+    }
+
+    // open add modal
+    function openAddModal() {
+        $('#modalTitle').text('Add Driver');
+        $('#driverId').val('');
+        $('#driverFirstName').val('');
+        $('#driverLastName').val('');
+        $('#driverNationality').val('');
+        $('#driverNumber').val('');
+    }
+
+    // open edit modal
+    function openEditModal(id) {
+        $.ajax({
+            url: API + '/' + id,
+            type: 'GET',
+            dataType: 'json',
+            success: function(d) {
+                $('#modalTitle').text('Edit Driver');
+                $('#driverId').val(d.id);
+                $('#driverFirstName').val(d.firstName);
+                $('#driverLastName').val(d.lastName);
+                $('#driverNationality').val(d.nationality);
+                $('#driverNumber').val(d.driverNumber);
+                const modal = new bootstrap.Modal(document.getElementById('driverModal'));
+                modal.show();
+            }
+        });
+    }
+
+    // save (add or edit)
+    function saveDriver() {
+        const id = $('#driverId').val();
         const body = {
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            nationality: document.getElementById('nationality').value,
-            driverNumber: parseInt(document.getElementById('driverNumber').value)
+            firstName: $('#driverFirstName').val(),
+            lastName: $('#driverLastName').val(),
+            nationality: $('#driverNationality').val(),
+            driverNumber: parseInt($('#driverNumber').val()) || 0
         };
-        const method = id ? 'PUT' : 'POST';
-        const url = id ? `${API}/${id}` : API;
-        await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-        clearForm();
-        showToast(id ? 'Driver updated!' : 'Driver added!');
-        loadDrivers();
+
+        $.ajax({
+            url: id ? API + '/' + id : API,
+            type: id ? 'PUT' : 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(body),
+            success: function() {
+                bootstrap.Modal.getInstance(document.getElementById('driverModal')).hide();
+                getAllDrivers();
+                showToast(id ? 'Driver updated successfully!' : 'Driver added successfully!', true);
+            },
+            error: function() {
+                showToast('Save failed', false);
+            }
+        });
     }
 
-    function editDriver(id, firstName, lastName, nationality, driverNumber) {
-        document.getElementById('driverId').value = id;
-        document.getElementById('firstName').value = firstName;
-        document.getElementById('lastName').value = lastName;
-        document.getElementById('nationality').value = nationality;
-        document.getElementById('driverNumber').value = driverNumber;
+    // delete
+    function deleteDriver(id) {
+        if (!confirm('Are you sure you want to delete this driver?')) return;
+        $.ajax({
+            url: API + '/' + id,
+            type: 'DELETE',
+            success: function() {
+                getAllDrivers();
+                showToast('Driver deleted successfully!', true);
+            },
+            error: function() {
+                showToast('Delete failed', false);
+            }
+        });
     }
-
-    async function deleteDriver(id) {
-        await fetch(`${API}/${id}`, { method: 'DELETE' });
-        showToast('Driver deleted!');
-        loadDrivers();
-    }
-
-    function clearForm() {
-        ['driverId','firstName','lastName','nationality','driverNumber'].forEach(f => document.getElementById(f).value = '');
-    }
-
-    function showToast(msg) {
-        document.getElementById('toastMsg').textContent = msg;
-        new bootstrap.Toast(document.getElementById('toast')).show();
-    }
-
-    loadDrivers();
 </script>
 </body>
 </html>
