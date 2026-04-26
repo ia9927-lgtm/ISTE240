@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Author: Izhan Akhtar - 421009836 -->
+<!-- Author: Om Singh - 751006630 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -8,31 +8,85 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         body { background: #0a0a0a; color: #e8e8e8; min-height: 100vh; }
+
+
         .hero { background: linear-gradient(135deg, #0a0a0a 60%, #1a0000);
-            border-bottom: 3px solid #e10600; padding: 50px 40px; }
-        .hero h1 { font-size: 3rem; font-weight: 800; }
+            border-bottom: 3px solid #e10600; padding: 70px 40px; }
+        .hero h1 { font-size: 3.5rem; font-weight: 900; letter-spacing: -1px; }
         .hero h1 span { color: #e10600; }
-        .hero p { color: #888; font-size: 1.1rem; }
+        .hero p { color: #888; font-size: 1.1rem; max-width: 600px; }
+        .hero .badge-group { background: rgba(225,6,0,0.12); color: #ff6b6b;
+            border: 1px solid rgba(225,6,0,0.3); font-size: 0.75rem;
+            padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 16px; }
+
+
+        .stats-bar { background: #111; border-bottom: 1px solid #222; padding: 20px 0; }
+        .stat-item { text-align: center; }
+        .stat-item .num { font-size: 1.8rem; font-weight: 800; color: #e10600; }
+        .stat-item .label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+
         .nav-card { background: #111; border: 1px solid #2a2a2a; border-radius: 12px;
             padding: 28px 24px; transition: border-color .2s, transform .15s; cursor: pointer;
-            text-decoration: none; color: #e8e8e8; display: block; }
-        .nav-card:hover { border-color: #e10600; transform: translateY(-3px); color: #e8e8e8; }
-        .nav-card .icon { font-size: 2.2rem; margin-bottom: 12px; }
+            text-decoration: none; color: #e8e8e8; display: block; height: 100%; }
+        .nav-card:hover { border-color: #e10600; transform: translateY(-4px); color: #e8e8e8; }
+        .nav-card .icon { font-size: 2.5rem; margin-bottom: 12px; }
         .nav-card h4 { font-weight: 700; margin-bottom: 6px; }
-        .nav-card p { color: #777; font-size: 0.9rem; margin: 0; }
+        .nav-card p { color: #777; font-size: 0.88rem; margin: 0; }
         .badge-entity { background: rgba(225,6,0,0.15); color: #ff6b6b;
             border: 1px solid rgba(225,6,0,0.3); font-size: 0.7rem;
             padding: 3px 9px; border-radius: 20px; margin-bottom: 10px; display: inline-block; }
-        footer { border-top: 1px solid #2a2a2a; color: #444; font-size: 0.8rem; padding: 20px 40px; }
+
+
+        .about-section { background: #0f0f0f; border-top: 1px solid #1f1f1f;
+            border-bottom: 1px solid #1f1f1f; padding: 50px 0; }
+        .about-section h3 { color: #e10600; font-weight: 700; margin-bottom: 16px; }
+        .tech-badge { background: #1a1a1a; border: 1px solid #333; color: #aaa;
+            font-size: 0.78rem; padding: 5px 12px; border-radius: 6px; display: inline-block; margin: 4px; }
+
+        .team-card { background: #111; border: 1px solid #2a2a2a; border-radius: 10px; padding: 20px; }
+        .team-card .name { font-weight: 700; font-size: 1rem; }
+        .team-card .role { color: #e10600; font-size: 0.78rem; }
+        .team-card .id { color: #555; font-size: 0.75rem; }
+
+        footer { border-top: 1px solid #1a1a1a; color: #444; font-size: 0.8rem; padding: 24px 40px; }
     </style>
 </head>
 <body>
+
+
 <div class="hero">
     <div class="container">
+        <div class="badge-group">ISTE 240 · Group 7 · Spring 2026</div>
         <h1>F1<span>Stats</span></h1>
-        <p>Formula 1 Data Dashboard — ISTE 240 Group 7 · Spring 2026</p>
+        <p class="mt-2">A full-stack Formula 1 data management dashboard. Browse, add, edit and delete drivers, teams, races and results — all in one place.</p>
+
     </div>
 </div>
+
+<div class="stats-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 stat-item">
+                <div class="num">4</div>
+                <div class="label">Entities</div>
+            </div>
+            <div class="col-3 stat-item">
+                <div class="num">24+</div>
+                <div class="label">REST Endpoints</div>
+            </div>
+            <div class="col-3 stat-item">
+                <div class="num">3</div>
+                <div class="label">Team Members</div>
+            </div>
+            <div class="col-3 stat-item">
+                <div class="num">1</div>
+                <div class="label">Database</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="container my-5">
     <p class="text-muted mb-4" style="font-size:.85rem; letter-spacing:2px; text-transform:uppercase;">
@@ -42,7 +96,7 @@
         <div class="col-md-3">
             <a href="drivers.html" class="nav-card">
                 <div class="badge-entity">Om Singh</div>
-                <div class="icon">Drivers</div>
+                <div class="icon">🏎️</div>
                 <h4>Drivers</h4>
                 <p>Browse and manage F1 driver records</p>
             </a>
@@ -50,7 +104,7 @@
         <div class="col-md-3">
             <a href="races.html" class="nav-card">
                 <div class="badge-entity">Adil N.</div>
-                <div class="icon">Races</div>
+                <div class="icon">🗓️</div>
                 <h4>Races</h4>
                 <p>View race calendar and circuit info</p>
             </a>
@@ -58,7 +112,7 @@
         <div class="col-md-3">
             <a href="results.html" class="nav-card">
                 <div class="badge-entity">Adil N.</div>
-                <div class="icon">Results</div>
+                <div class="icon">🏆</div>
                 <h4>Results</h4>
                 <p>Race results linking drivers and races</p>
             </a>
@@ -66,10 +120,65 @@
         <div class="col-md-3">
             <a href="teams.html" class="nav-card">
                 <div class="badge-entity">Izhan Akhtar</div>
-                <div class="icon">Teams</div>
+                <div class="icon">🔧</div>
                 <h4>Teams</h4>
                 <p>Manage F1 constructor teams</p>
             </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="about-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>About This Project</h3>
+                <p style="color:#888; line-height:1.8;">F1Stats is a full-stack web application built with Spring Boot and MariaDB. It provides a RESTful API for managing Formula 1 data including drivers, teams, races, and race results. The frontend uses Bootstrap 5 and jQuery to provide a clean, responsive interface.</p>
+            </div>
+            <div class="col-md-6">
+                <h3>Technologies</h3>
+                <div>
+                    <span class="tech-badge">Spring Boot 4.0</span>
+                    <span class="tech-badge">Spring Data JPA</span>
+                    <span class="tech-badge">Hibernate</span>
+                    <span class="tech-badge">MariaDB</span>
+                    <span class="tech-badge">Bootstrap 5</span>
+                    <span class="tech-badge">jQuery</span>
+                    <span class="tech-badge">REST API</span>
+                    <span class="tech-badge">Git & GitHub</span>
+                    <span class="tech-badge">Java 17</span>
+                    <span class="tech-badge">Maven</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container my-5">
+    <p class="text-muted mb-4" style="font-size:.85rem; letter-spacing:2px; text-transform:uppercase;">Meet the team</p>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="team-card">
+                <div class="name">Om Singh</div>
+                <div class="role">Driver Entity · drivers.html</div>
+                <div class="id">751006630</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="team-card">
+                <div class="name">Izhan Akhtar</div>
+                <div class="role">Team Entity · Merge Manager · index.html</div>
+                <div class="id">421009836</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="team-card">
+                <div class="name">Adil Nurmagambetov</div>
+                <div class="role">Race & Result Entities · races.html · results.html</div>
+                <div class="id">415002457</div>
+            </div>
         </div>
     </div>
 </div>
