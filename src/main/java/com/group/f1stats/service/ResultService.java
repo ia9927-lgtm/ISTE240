@@ -8,38 +8,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 @Transactional
 public class ResultService {
     private final ResultDAO resultDAO;
 
-
-    public ResultService(ResultDAO resultDAO){
+    public ResultService(ResultDAO resultDAO) {
         this.resultDAO = resultDAO;
     }
 
-
-    public Result findById(Long id){
+    public Result findById(Long id) {
         return resultDAO.findById(id)
                 .orElseThrow(() -> new RuntimeException("Result not found"));
     }
 
-    public List<Result> findByRaceId(Long raceId){
-        List<Result> result = resultDAO.findByRaceId(raceId);
-
-        if(result == null){
-            throw new RuntimeException("No results found");
-        }
-        return result;
+    public List<Result> findByRaceId(Long raceId) {
+        return resultDAO.findByRaceId(raceId);
     }
 
-    public List<Result> findByDriverId(Long driverId){
+    public List<Result> findByDriverId(Long driverId) {
         return resultDAO.findByDriverId(driverId);
     }
 
-
-    public List<Result> findAll(){
+    public List<Result> findAll() {
         return resultDAO.findAll();
     }
 
@@ -47,20 +38,19 @@ public class ResultService {
         if (!resultDAO.existsById(id)) {
             throw new RuntimeException("Result not found");
         }
-
         resultDAO.updatePointsEarnedById(id, points);
     }
 
-    public void deleteById(Long id){
-        if(!resultDAO.existsById(id)){
+    public void deleteById(Long id) {
+        if (!resultDAO.existsById(id)) {
             throw new RuntimeException("Result not found");
         }
         resultDAO.deleteById(id);
     }
 
-
-    public Result updateResult(Long id, Result resultToUpdate){
-        Result oldRes = resultDAO.findById(id).orElseThrow(() -> new RuntimeException("Result not found"));
+    public Result updateResult(Long id, Result resultToUpdate) {
+        Result oldRes = resultDAO.findById(id)
+                .orElseThrow(() -> new RuntimeException("Result not found"));
         oldRes.setRace(resultToUpdate.getRace());
         oldRes.setDriver(resultToUpdate.getDriver());
         oldRes.setPointsEarned(resultToUpdate.getPointsEarned());
@@ -69,11 +59,7 @@ public class ResultService {
         return resultDAO.save(oldRes);
     }
 
-    public Result createResult(Result result){
-        if(result.getId() != 0  && resultDAO.existsById(result.getId())){
-            throw new RuntimeException("Result already exists");
-        }
+    public Result createResult(Result result) {
         return resultDAO.save(result);
     }
-
 }
