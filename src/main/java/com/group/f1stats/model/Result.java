@@ -1,19 +1,32 @@
+// Adil Nurmagambetov UID:415002457
 package com.group.f1stats.model;
 
-public class Result {
 
-    private int id;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="results")
+public class Result {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name="raceID")
     private Race race;
+    @ManyToOne
+    @JoinColumn(name="driverID")
     private Driver driver;
+    @Column(name="finishingPosition", nullable = false)
     private int finishingPosition;
+    @Column(name="pointsEarned", nullable = false)
     private int pointsEarned;
+    @Column(name="fastestLapTime", length = 100)
     private String fastestLapTime;
 
     public Result() {}
 
-    public Result(int id, Race race, Driver driver,
+    public Result( Race race, Driver driver,
                   int finishingPosition, int pointsEarned, String fastestLapTime) {
-        this.id = id;
         this.race = race;
         this.driver = driver;
         this.finishingPosition = finishingPosition;
@@ -21,8 +34,8 @@ public class Result {
         this.fastestLapTime = fastestLapTime;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id=id; }
     public Race getRace() { return race; }
     public void setRace(Race race) { this.race = race; }
     public Driver getDriver() { return driver; }
