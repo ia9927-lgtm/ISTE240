@@ -8,7 +8,10 @@ import jakarta.persistence.*;
 @Table(name = "drivers")
 public class Driver {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String firstName;
     private String lastName;
     private String nationality;
